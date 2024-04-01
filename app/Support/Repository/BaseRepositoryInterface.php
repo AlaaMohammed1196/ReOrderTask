@@ -51,5 +51,5 @@ interface BaseRepositoryInterface
      * @param array $search
      * @return Collection
      */
-    public function getAll(array $search = []): Collection;
+    public function getAll(): Collection;
 }

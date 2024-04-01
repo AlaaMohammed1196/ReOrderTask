@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Model;
 trait Queryable
 {
 
-    public function getAll(array $search = []): Collection
+    public function getAll(): Collection
     {
         return $this->getQuery()->get();
     }
@@ -17,6 +17,6 @@ trait Queryable
     protected function getQuery(): Builder
     {
         /** @var Model $model */
-        return app($this->getModelClass());
+        return app($this->getModelClass())->query();
     }
 }

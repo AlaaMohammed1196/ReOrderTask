@@ -37,17 +37,15 @@ trait Crudable
      */
     public function update($keyOrModel, array $data): ?Model
     {
-        $model = $this->resolveModel($keyOrModel);
-
-        if (!$model->update($data)) {
+        if (!$keyOrModel->update($data)) {
             return null;
         }
 
-        if (!is_array($model->getKey())) {
-            return $model->refresh();
+        if (!is_array($keyOrModel->getKey())) {
+            return $keyOrModel->refresh();
         }
 
-        return $model;
+        return $keyOrModel;
     }
 
     /**
@@ -60,12 +58,6 @@ trait Crudable
 
     public function delete($keyOrModel): bool
     {
-        $model = $this->resolveModel($keyOrModel);
-
-        if ($this->isInstanceOfSoftDeletes($model)) {
-            return !is_null($model->forceDelete());
-        }
-
-        return !is_null($model->delete());
+        return !is_null($keyOrModel->delete());
     }
 }

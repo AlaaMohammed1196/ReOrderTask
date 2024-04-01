@@ -3,75 +3,61 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\interfaces\ArticleRepositoryInterface;
+use App\Http\Requests\ArticleRequest;
+use App\Http\Resources\ArticleResource;
+use App\Interfaces\ArticleServiceInterface;
+use App\Models\Article;
 use App\Support\Traits\GeneralTrait;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 class ArticleController extends Controller
 {
      Use GeneralTrait;
 
-      private  ArticleRepositoryInterface $articleRepositoryInterface;
-       public function __construct(ArticleRepositoryInterface $articleRepositoryInterface)
+     private ArticleServiceInterface $articleServiceInterface;
+
+       public function __construct(ArticleServiceInterface $articleServiceInterface)
        {
-           $this->articleRepositoryInterface = $articleRepositoryInterface;
+           $this->articleServiceInterface = $articleServiceInterface;
        }
 
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index():JsonResponse
     {
-        $articles=$this->articleRepositoryInterface->getAll();
-        return $this->
+        $articles=ArticleResource::collection($this->articleServiceInterface->getAll());
+        return $this->returnDate($articles, 'List Articles');
 
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(ArticleRequest $articleRequest):JsonResponse
     {
-        //
+        $this->articleServiceInterface->create($articleRequest->all());
+        return $this->returnSuccessMessage('Created Successfully');
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(ArticleRequest $articleRequest,Article $article) :JsonResponse
     {
-        //
+        $this->articleServiceInterface->update($article,$articleRequest->all());
+        return $this->returnSuccessMessage('Updated Successfully');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Article $article)
     {
-        //
+        $this->articleServiceInterface->delete($article);
+        return $this->returnSuccessMessage('Deleted Successfully');
     }
 }

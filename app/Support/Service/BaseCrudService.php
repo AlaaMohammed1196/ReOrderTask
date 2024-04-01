@@ -1,5 +1,5 @@
 <?php
-namespace App\Support\Repository;
+namespace App\Support\Service;
 
 use App\Support\Service\BaseCrudServiceInterface;
 use Illuminate\Database\Eloquent\Collection as EloquentCollection;
@@ -12,7 +12,7 @@ abstract class BaseCrudService implements  BaseCrudServiceInterface
 
     public function __construct()
     {
-        $this->repository=$this->getRepositoryClass();
+        $this->repository=app($this->getRepositoryClass());
     }
 
     /**
@@ -22,7 +22,7 @@ abstract class BaseCrudService implements  BaseCrudServiceInterface
      */
     public function getAll(): EloquentCollection
     {
-        return $this->repository->getAll($search);
+        return $this->repository->getAll();
     }
 
     /**
@@ -35,7 +35,7 @@ abstract class BaseCrudService implements  BaseCrudServiceInterface
     public function create(array $data): ?Model
     {
         if (is_null($model = $this->repository->create($data))) {
-            throw new ServiceException('Error while creating model');
+            throw new \Exception('Error while creating model');
         }
 
         return $model;
@@ -63,7 +63,7 @@ abstract class BaseCrudService implements  BaseCrudServiceInterface
     public function delete($keyOrModel): bool
     {
         if (!$this->repository->delete($keyOrModel)) {
-            throw new ServiceException('Error while deleting model');
+            throw new \Exception('Error while deleting model');
         }
 
         return true;
