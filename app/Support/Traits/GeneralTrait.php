@@ -4,7 +4,7 @@ namespace App\Support\Traits;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Http\JsonResponse;
-use SLIM\Constants\HttpStatus;
+use Symfony\Component\HttpFoundation\Response;
 
 trait GeneralTrait
 {
@@ -21,7 +21,7 @@ trait GeneralTrait
         return response()->json([
             'status' => true,
             'message' => $message
-        ], HttpStatus::OK);
+        ],Response::HTTP_OK);
 
     }
 
@@ -31,26 +31,12 @@ trait GeneralTrait
             'status' => true,
             'message' => $message,
             'Data' => $value
-        ], HttpStatus::OK);
+        ], Response::HTTP_OK);
     }
 
-    public function returnDateWithPaginate($key, $value, $message, $resourcePath)
-    {
-
-        return response()->json([
-            'success' => 'true',
-            'message' => $message,
-            'items' => $resourcePath::collection($value),
-            'size' => $value->count(),
-            'page' => $value->currentPage(),
-            'total_pages' => $value->lastPage(),
-            'total_size' =>$value->total(),
-            'per_page' => $value->perPage(),
-        ]);
-    }
 
     public function failedValidation(Validator $validator)
     {
-        throw new HttpResponseException($this->returnError($validator->errors(), HttpStatus::UNPROCESSABLE_CONTENT));
+        throw new HttpResponseException($this->returnError($validator->errors(), Response::HTTP_UNPROCESSABLE_ENTITY));
     }
 }

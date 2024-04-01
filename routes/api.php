@@ -22,7 +22,19 @@ use App\Http\Controllers\Api\{
 //    return $request->user();
 //});
 //
-Route::controller(ArticleController::class)
+Route::middleware('auth:api')->controller(ArticleController::class)
     ->group(function (){
-       Route::get('article','index');
+       Route::get('articles','index');
+       Route::post('articles','store');
+       Route::put('articles/{article}','update');
+       Route::delete('articles/{article}','destroy');
     });
+
+
+Route::controller(AuthController::class)
+    ->group(function (){
+        Route::post('register','register');
+        Route::post('login','login');
+        Route::get('orders','orders');
+    });
+

@@ -4,7 +4,7 @@ namespace App\Repositories;
 
 use App\Models\Article;
 use App\Support\Repository\BaseRepository;
-use App\interfaces\ArticleRepositoryInterface;
+use App\Interfaces\ArticleRepositoryInterface;
 use App\Support\Repository\Exception;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Collection;
