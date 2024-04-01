@@ -49,36 +49,4 @@ class AuthController extends Controller
         return $this->returnSuccessMessage('User Register Successfully');
     }
 
-    public function orders()
-    {
-
-
-
-        //Part 3: Query Refactoring
-        $orders = \DB::table('orders')
-            ->select('orders.id as order_id','orders.amount as order_cost','products.name as product_name','categories.name as category_name','order_items.quantity as saleQuantity')
-            ->join('order_items','orders.id','=','order_items.order_id')
-            ->join('products','order_items.product_id','=','products.id')
-            ->join('categories','products.category_id','=','categories.id')
-            ->where('categories.name','=','Electronics')
-             ->whereDate('orders.created_at', '>', \Carbon\Carbon::now()->subDays(30))
-            ->orderBy('orders.created_at','desc')
-            ->limit(10)
-            ->get();
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    }
-
 }
